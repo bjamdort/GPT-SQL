@@ -1,0 +1,42 @@
+﻿@page "/"
+@using GPT_Test.Client.Components
+@using GPT_Test.Shared;
+@inject HttpClient Http
+
+<PageTitle>Index</PageTitle>
+
+<div class="input-group mb-3">
+	<input type="text" class="form-control" @bind-value=gptQuery />
+	<button class="btn btn-outline-secondary" type="button" @onclick="SendQuery">Button</button>
+</div>
+
+<div>
+	@if (@gptQueryResult == null)
+	{
+		<p>Loading...</p>
+	}
+	else
+	{
+		<code>@gptQueryResult.SqlQuery</code>
+		<p>@gptQueryResult.TextResponse</p>
+		<GptTable tableData=@gptQueryResult.TableResponse />
+	}
+</div>
+
+
+@code {
+	private string gptQuery = "Show me all products";
+
+	private GptQuery? gptQueryResult = null;
+
+	private async Task SendQuery(MouseEventArgs arg)
+	{
+		gptQueryResult = null;
+		var response = await Http.GetFromJsonAsync<GptQuery>("GptQuery?query=" + gptQuery);
+		if (response != null)
+		{
+			gptQueryResult = response;
+		}
+	}
+
+}

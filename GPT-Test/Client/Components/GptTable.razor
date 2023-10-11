@@ -1,0 +1,28 @@
+﻿@using GPT_Test.Shared;
+
+<table class="table">
+	<thead>
+		<tr>
+			@foreach (var columnName in tableData.ColumnNames)
+			{
+				<th>@columnName</th>
+			}
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var row in tableData.RowData)
+		{
+			<tr>
+				@foreach (var cell in row)
+				{
+					<td>@cell</td>
+				}
+			</tr>
+		}
+	</tbody>
+</table>
+
+@code {
+	[Parameter]
+	public GptTableData tableData { get; set; }
+}
