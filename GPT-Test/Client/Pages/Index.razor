@@ -6,7 +6,7 @@
 <PageTitle>Index</PageTitle>
 
 <div class="input-group mb-3">
-	<input type="text" class="form-control" @bind-value=gptQuery />
+	<input type="text" class="form-control" @bind-value=gptQuery @onkeydown="@Enter" />
 	<button class="btn btn-outline-secondary" type="button" @onclick="SendQuery">Button</button>
 </div>
 
@@ -29,7 +29,13 @@
 
 	private GptQuery? gptQueryResult = null;
 
-	private async Task SendQuery(MouseEventArgs arg)
+	private async Task Enter(KeyboardEventArgs e)
+	{
+		if (e.Key == "Enter")
+			await SendQuery();
+	}
+
+	private async Task SendQuery()
 	{
 		gptQueryResult = null;
 		var response = await Http.GetFromJsonAsync<GptQuery>("GptQuery?query=" + gptQuery);
@@ -38,5 +44,4 @@
 			gptQueryResult = response;
 		}
 	}
-
 }

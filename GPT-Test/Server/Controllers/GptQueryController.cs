@@ -60,13 +60,12 @@ namespace GPT_Test.Server.Controllers
 		{
 			var chat = _gptApi.Chat.CreateConversation();
 
-			string context = @"Explain the results of this Database Query in layman terms, the results are seperated by newlines for rows and commas for columns.
-					The first row is fillid with column names";
+			chat.AppendSystemMessage(@$"You are a data scientist that draws conclusions from datasets, you write in plain text");
 
-			chat.AppendSystemMessage($@"Explain this result:
-										{query}");
-
-			chat.AppendUserInput(query);
+			chat.AppendUserInput($@"Make observations and draw conclusions from these results in 4 sentences:
+										```SQL
+										{query}
+										```");
 
 			return await chat.GetResponseFromChatbotAsync();
 		}
